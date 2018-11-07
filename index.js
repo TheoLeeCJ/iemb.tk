@@ -182,15 +182,58 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Event listener to log out
 	document.getElementById('logout-button').addEventListener('click', logout);
 
+	document.getElementById('close').addEventListener('click', () => {
+		viewElement.style.opacity = 0;
+		document.getElementById('close').style.opacity = 0;
+		document.getElementById('selected').id = '';
+		setTimeout(() => viewElement.classList.remove('open-message'), 200);
+	});
+
 	// Event listener to load messages
 	listElement.addEventListener('click', e => {
 		if (e.target !== e.currentTarget) {
 			const target = e.target.parentNode === listElement ? e.target : e.target.parentNode;
-			console.log('Running Message Load Event Listener');
-			if (document.getElementById('selected')) document.getElementById('selected').id = '';
-			target.id = 'selected';
+
+			if (Math.max(document.documentElement.clientWidth, window.innerWidth || 0) <= 650) {
+				viewElement.style.padding = '6px 16px 6px 20px';
+				viewElement.style.top = target.getBoundingClientRect().top + 'px';
+				viewElement.style.maxHeight = '60px';
+				viewElement.style.opacity = 1;
+				setTimeout(() => {
+					document.getElementById('close').style.opacity = 1;
+					document.getElementById('close').style.pointerEvents = 'initial';
+					viewElement.removeAttribute('style');
+					viewElement.classList.add('open-message');
+				});
+			}
 
 			while (viewElement.hasChildNodes()) viewElement.removeChild(viewElement.lastChild);
+			// TODO: Improve this function
+			for (let message of messages[target.dataset.board]) {
+				if (message.id == target.dataset.id) {
+					console.log(message);
+
+					const metadata = document.createElement('section');
+
+					const title = document.createElement('div');
+					title.appendChild(document.createTextNode(message.title));
+
+					const sender = document.createElement('div');
+					sender.appendChild(document.createTextNode(message.sender.toLowerCase()));
+
+					const datetime = document.createElement('div');
+					datetime.appendChild(document.createTextNode(message.date));
+
+					metadata.appendChild(title);
+					metadata.appendChild(sender);
+					metadata.appendChild(datetime);
+
+					viewElement.appendChild(metadata);
+				}
+			}
+
+			if (document.getElementById('selected')) document.getElementById('selected').id = '';
+			target.id = 'selected';
 
 			loadingOverlay.classList.remove('hidden');
 			loadingDesc.innerHTML = 'Loading Message';
@@ -202,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}).then(res => res.json()).then(data => {
 				if (!data.success) throw data.error;
 
+				while (viewElement.hasChildNodes()) viewElement.removeChild(viewElement.lastChild);
 				// TODO: Improve this function
 				for (let message of messages[target.dataset.board]) {
 					if (message.id == target.dataset.id) {

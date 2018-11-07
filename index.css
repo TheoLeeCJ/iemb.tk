@@ -9,6 +9,7 @@
 	padding-top: 30vh;
 	background-color: rgba(255, 255, 255, 0.9);
 	transition: .2s opacity ease-in-out;
+	z-index: 5;
 }
 .hidden {
 	opacity: 0;
@@ -22,7 +23,7 @@
 	}
 }
 
-header, #filter-container, #messages, summary {
+header, #filter-container, #messages, summary, #close {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -39,7 +40,7 @@ header {
 	align-items: center;
 	padding: 6px 0;
 	box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
-	z-index: 2;
+	z-index: 4;
 }
 
 header > * {
@@ -70,7 +71,7 @@ header i:not(#loading-icon) {
 	transition: .15s max-height ease-in-out;
 	overflow: hidden;
 	max-height: 400px;
-	z-index: 1;
+	z-index: 3;
 }
 #filter-container:not(.open-dropdown) {
 	pointer-events: none;
@@ -227,7 +228,9 @@ header i:not(#loading-icon) {
 	bottom: 0;
 	width: calc(100% - 400px);
 	max-width: 100%;
+	background-color: #fff;
 	-webkit-overflow-scrolling: touch;
+	z-index: 1;
 }
 #viewer section:first-child {
 	border-bottom: 1px solid #ccc;
@@ -333,6 +336,22 @@ input[type='radio']:checked + label .radio-indicator {
 	color: #FFF;
 }
 
+#close {
+	position: fixed;
+	top: 60px;
+	right: 10px;
+	z-index: 2;
+	cursor: pointer;
+	background-image: radial-gradient(#fff 0, rgba(255, 255, 255, 0) 80%);
+	height: 32px;
+	width: 32px;
+	text-align: center;
+	line-height: 32px;
+	transition: .2s opacity ease-in-out;
+	opacity: 0;
+	pointer-events: none;
+}
+
 @media screen and (max-width: 800px) {
 	#messages {
 		width: 300px;
@@ -349,6 +368,17 @@ input[type='radio']:checked + label .radio-indicator {
 	}
 	#viewer {
 		width: 100%;
+		opacity: 0;
+		pointer-events: none;
+		position: fixed;
+		left: 0;
+	}
+	#viewer.open-message {
+		transition: .2s top ease-in-out, .1s opacity ease-in-out, .2s max-height ease-in-out, .15s padding ease-in-out;
+		top: 50px;
+		max-height: calc(100vh - 50px);
+		opacity: 1;
+		pointer-events: initial;
 	}
 }
 

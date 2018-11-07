@@ -1,0 +1,77 @@
+main {
+	text-align: center;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	height: 500px;
+	width: 450px;
+	padding: 64px 48px;
+	border-radius: 8px;
+}
+main:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+h1 {
+	font-weight: 400;
+	margin: 0;
+	font-size: 28px;
+}
+
+form {
+	margin-top: 48px;
+	text-align: initial;
+}
+
+.md-input {
+	margin-top: 20px;
+	padding: 4px 2px;
+}
+.md-input:focus ~ span, .md-input:not(:placeholder-shown) ~ span {
+	transform: translateY(-16px) scale(.7);
+}
+
+small {
+	margin: 24px 0;
+	display: block;
+	font-size: 14px;
+	color: #5f6368;
+}
+
+a {
+	text-decoration: none;
+	color: #D32F2F;
+	padding: 4px;
+	margin-left: -4px;
+	border-radius: 4px;
+	transition: .1s background-color ease-in-out;
+}
+a:link, a:visited {
+	color: #D32F2F;
+	outline: none;
+}
+a:active {
+	text-decoration: none;
+	background-color: #FFCDD2;
+}
+
+#error {
+	color: #F44336;
+	font-size: 14px;
+	margin-top: 8px;
+}
+
+@media screen and (max-width: 600px), (max-height: 550px) {
+	main {
+		position: initial;
+		transform: initial;
+		width: 100%;
+		box-shadow: none;
+		padding: 24px 12px;
+		height: auto;
+	}
+}

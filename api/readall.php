@@ -21,12 +21,11 @@ ob_end_flush();
 ob_flush();
 flush();
 
-$messages = json_decode($_POST['messages']);
+$messages = json_decode($_POST['messages'], true);
 $mh = curl_multi_init();
 foreach ($messages as $message) {
-	$ch = curl_init('https://iemb.hci.edu.sg/Board/content/' . $message . '?board=1048&isArchived=False');
+	$ch = curl_init('https://iemb.hci.edu.sg/Board/content/' . $message['id'] . '?board=' . $message['board'] . '&isArchived=False');
 	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Cookie: ASP.NET_SessionId=' . $_POST['sessid']]);
-	curl_setopt($ch, CURLOPT_NOBODY, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  2);
 	curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);

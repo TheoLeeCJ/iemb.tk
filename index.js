@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (!cookie.get('username') || !cookie.get('password')) window.location = 'login.html';
 	if (!cookie.get('sessid')) cookie.set('sessid', 'TEMPORARY', 100);
 
-	let messages, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1050', '1039', '1049', '1053'];
-	const loadingDesc = document.getElementById('loading-text'), loadingOverlay = document.getElementById('loading'), loadingIcon = document.getElementById('loading-icon'), listElement = document.getElementById('messages'), viewElement = document.getElementById('viewer');
+	let messages, headerHidden = false, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1050', '1039', '1049', '1053'];
+	const header = document.getElementsByTagName('header')[0], loadingDesc = document.getElementById('loading-text'), loadingOverlay = document.getElementById('loading'), loadingIcon = document.getElementById('loading-icon'), listElement = document.getElementById('messages'), viewElement = document.getElementById('viewer');
 
 	function updateLocalStorage() {
 		localStorage.messages = JSON.stringify(messages);
@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			fetch(`api/messages.php?&board=${encodeURIComponent(board)}`, {
 				credentials: 'include'
 			}).then(res => res.json()).then(data => {
-				console.info(`Loaded Board ${board}`);
 				if (data.success) res(data.content);
 				else throw data.error;
 			}).catch(err => rej(err));
@@ -54,8 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	function renderMessages(query = '') {
-		console.info('Rendering messages...');
-
 		// Clears the div of messages
 		while (listElement.hasChildNodes()) listElement.removeChild(listElement.lastChild);
 
@@ -152,27 +149,51 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	// Hide header on scroll
+	if (Math.max(document.documentElement.clientWidth, window.innerWidth || 0) <= 650) {
+		let scrolled, lastPos = 0;
+		listElement.addEventListener('scroll', () => scrolled = true);
+		setInterval(() => {
+			if (scrolled) {
+				pos = listElement.scrollTop;
+				if (Math.abs(pos - lastPos) < 10) return;
+				if (pos > lastPos) header.classList.add('hide');
+				else header.classList.remove('hide');
+				scrolled = false;
+				lastPos = pos;
+			}
+		}, 250);
+	}
+
 	// Event listener to open dropdown
 	document.getElementById('filter-button').addEventListener('click', () => document.getElementById('filter-container').classList.toggle('open-dropdown'));
 
 	document.getElementById('clear-all').addEventListener('click', () => {
 		let unreads = [];
-		for (board in messages) {
-			board.forEach(message => {
-				if (message.unread) {
-					unreads += message.id;
-					message.unread = false;
-				}
-			})
-		}
+		const UNREADS = document.getElementsByClassName('unread');
+		for (let message of UNREADS) 
+			unreads.push({
+				id: message.dataset.id,
+				board: message.dataset.board
+			});
 		fetch('api/readall.php', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: `sessid=${encodeURIComponent(cookie.get('sessid'))}&${encodeURIComponent(JSON.stringify(unreads))}`
+			body: `sessid=${encodeURIComponent(cookie.get('sessid'))}&messages=${encodeURIComponent(JSON.stringify(unreads))}`
 		}).then(res => res.json()).then(data => {
-			if (!data.success) throw data.error
+			if (!data.success) throw data.error;
+			for (let i = UNREADS.length - 1; i >= 0; i -= 1) {
+				for (let message of messages[UNREADS[i].dataset.board]) {
+					if (message.id == UNREADS[i].dataset.id) {
+						if (message.unread) message.unread = false;
+						else break;
+					}
+				}
+				UNREADS[i].classList.remove('unread');
+			}
+		updateLocalStorage();
 		}).catch(err => {
 			alert('An error occured');
 			console.error(err);
@@ -183,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('logout-button').addEventListener('click', logout);
 
 	document.getElementById('close').addEventListener('click', () => {
+		if (!headerHidden) header.classList.remove('hide');
 		viewElement.style.opacity = 0;
 		document.getElementById('close').style.opacity = 0;
 		document.getElementById('selected').id = '';
@@ -194,7 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (e.target !== e.currentTarget) {
 			const target = e.target.parentNode === listElement ? e.target : e.target.parentNode;
 
+			headerHidden = header.classList.contains('hide');
+
 			if (Math.max(document.documentElement.clientWidth, window.innerWidth || 0) <= 650) {
+				header.classList.add('hide');
 				viewElement.style.padding = '6px 16px 6px 20px';
 				viewElement.style.top = target.getBoundingClientRect().top + 'px';
 				viewElement.style.maxHeight = '60px';
@@ -211,8 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			// TODO: Improve this function
 			for (let message of messages[target.dataset.board]) {
 				if (message.id == target.dataset.id) {
-					console.log(message);
-
 					const metadata = document.createElement('section');
 
 					const title = document.createElement('div');
@@ -275,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				viewElement.innerHTML += data.content.message;
 
 				if (data.content.attachments.length > 0) {
-					console.info('Loading attachments');
 					const details = document.createElement('details');
 
 					const summary = document.createElement('summary');
@@ -293,7 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 
 				if (data.content.form.present) {
-					console.info('Loading form');
 					const details = document.createElement('details');
 
 					const summary = document.createElement('summary');

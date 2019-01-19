@@ -70,8 +70,8 @@ header i:not(#loading-icon) {
 #filter-container {
 	filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.3));
 	position: absolute;
-	top: 56px;
-	right: 56px;
+	top: 58px;
+	transform: translateX(calc(-50% + 12px));
 	width: 225px;
 	transition: .15s max-height ease-in-out;
 	overflow: hidden;
@@ -86,8 +86,8 @@ header i:not(#loading-icon) {
 	border-radius: 8px;
 	padding: 20px 14px 8px 12px;
 	background-color: #fff;
-	-webkit-clip-path: polygon(0 12px, 129px 12px, 141px 0, 153px 12px, 100% 12px, 100% 100%, 0 100%);
-	clip-path: polygon(0 12px, 129px 12px, 141px 0, 153px 12px, 100% 12px, 100% 100%, 0 100%);
+	-webkit-clip-path: polygon(0 12px, calc(50% - 12px) 12px, 50% 0, calc(50% + 12px) 12px, 100% 12px, 100% 100%, 0 100%);
+	clip-path: polygon(0 12px, calc(50% - 12px) 12px, 50% 0, calc(50% + 12px) 12px, 100% 12px, 100% 100%, 0 100%);
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 #filter ul {
@@ -389,6 +389,15 @@ input[type='radio']:checked + label .radio-indicator {
 	}
 	#messages, #viewer {
 		top: 0;
+	}
+	#filter-container {
+		top: initial;
+		bottom: 58px;
+	}
+	#filter {
+		padding: 8px 14px 20px 12px;
+		-webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(50% - 12px) calc(100% - 12px), 50% 100%, calc(50% + 12px) calc(100% - 12px), 0 calc(100% - 12px));
+		clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(50% - 12px) calc(100% - 12px), 50% 100%, calc(50% + 12px) calc(100% - 12px), 0 calc(100% - 12px));
 	}
 }
 

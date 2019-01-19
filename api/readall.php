@@ -28,6 +28,7 @@ foreach ($messages as $message) {
 	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Cookie: ASP.NET_SessionId=' . $_POST['sessid']]);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  2);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
 	curl_multi_add_handle($mh, $ch);

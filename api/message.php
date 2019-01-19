@@ -1,5 +1,5 @@
 <?php
-if (empty($_GET['message'])) {
+if (empty($_GET['message']) || empty($_COOKIE['sessid'])) {
 	header('HTTP/2.0 400 Bad Request');
 	exit(json_encode([
 		'success' => false,
@@ -7,13 +7,6 @@ if (empty($_GET['message'])) {
 	]));
 }
 
-if (empty($_GET['sessid']) && empty($_COOKIE['sessid'])) {
-	header('HTTP/2.0 400 Bad Request');
-	exit(json_encode([
-		'success' => false,
-		'error' => 'missing'
-	]));
-}
 $sessid = empty($_GET['sessid']) ? $_COOKIE['sessid'] : $_GET['sessid'];
 
 require 'curl.php';

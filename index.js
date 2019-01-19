@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (!cookie.get('username') || !cookie.get('password')) window.location = 'login.html';
 	if (!cookie.get('sessid')) cookie.set('sessid', 'TEMPORARY', 100);
 
-	let messages, headerHidden = false, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1050', '1039', '1049', '1053'];
+	let messages, headerHidden = false, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1050', '1039', '1049'];
 	const header = document.getElementsByTagName('header')[0], loadingDesc = document.getElementById('loading-text'), loadingOverlay = document.getElementById('loading'), loadingIcon = document.getElementById('loading-icon'), listElement = document.getElementById('messages'), viewElement = document.getElementById('viewer');
 
 	function updateLocalStorage() {
@@ -17,13 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	function init() {
 		loadingIcon.innerHTML = 'cloud_download';
-		Promise.all([getMessages(1048), getMessages(1050), getMessages(1039), getMessages(1049), getMessages(1053)]).then(data => {
+		Promise.all([getMessages(1048), getMessages(1050), getMessages(1039), getMessages(1049)]).then(data => {
 			messages = {
 				1048: data[0],
 				1050: data[1],
 				1039: data[2],
 				1049: data[3],
-				1053: data[4]
 			};
 			renderMessages();
 			updateLocalStorage();
@@ -268,13 +267,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			}).then(res => res.json()).then(data => {
 				if (!data.success) throw data.error;
 
+				target.classList.remove('unread');
+
 				while (viewElement.hasChildNodes()) viewElement.removeChild(viewElement.lastChild);
 				// TODO: Improve this function
 				for (let message of messages[target.dataset.board]) {
 					if (message.id == target.dataset.id) {
-						if (message.unread) message.unread = false;
+						if (message.unread) {
+							message.unread = false;
+							updateLocalStorage();
+						}
 						else break;
-						updateLocalStorage();
 					}
 				}
 
@@ -469,3 +472,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Refresh messages every 15 minutes
 	setInterval(init, 900000);
 });
+
+window.onload = () => document.getElementById('filter-container').style.left = `${document.getElementById('filter-button').getBoundingClientRect().left}px`;

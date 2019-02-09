@@ -43,7 +43,6 @@ if ($imgs = $message->getElementsByTagName('img')) {
 			$f = finfo_open();
 			$imgtype = finfo_buffer($f, $file, FILEINFO_MIME_TYPE);
 			$base = base64_encode($file);
-			echo $base;
 			$img->setAttribute('src', 'data:' . $imgtype . ';base64,' . $base);
 		}
 	}

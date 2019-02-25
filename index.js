@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				case 'expired':
 					renewSession(init);
 				default:
-					alert('An error occured');
+					alert('Failed to download messages list');
 					console.error(err);
 			}
 		});
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					logout();
 					break;
 				default:
-					alert('An error occured');
+					alert('Failed to renew session');
 					console.error(err);
 			}
 		});
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				case 'expired':
 					break;
 				default:
-				alert('An error occured');
+				alert('Failed to log out');
 				console.error(err);
 			}
 		});
@@ -168,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('filter-button').addEventListener('click', () => document.getElementById('filter-container').classList.toggle('open-dropdown'));
 
 	document.getElementById('clear-all').addEventListener('click', () => {
+		loadingOverlay.classList.remove('hidden');
+		loadingDesc.innerHTML = 'Reading Messages';
 		let unreads = [];
 		const UNREADS = document.getElementsByClassName('unread');
 		for (let message of UNREADS) 
@@ -182,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			},
 			body: `sessid=${encodeURIComponent(cookie.get('sessid'))}&messages=${encodeURIComponent(JSON.stringify(unreads))}`
 		}).then(res => res.json()).then(data => {
+			loadingOverlay.classList.add('hidden');
 			if (!data.success) throw data.error;
 			for (let i = UNREADS.length - 1; i >= 0; i -= 1) {
 				for (let message of messages[UNREADS[i].dataset.board]) {
@@ -194,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		updateLocalStorage();
 		}).catch(err => {
-			alert('An error occured');
+			alert('Failed to read all');
 			console.error(err);
 		})
 	});
@@ -373,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 									submit.click();
 									break;
 								default:
-								alert('An error occured');
+								alert('Failed to submit response');
 								console.error(err);
 							}
 						});
@@ -389,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						renewSession(() => {document.getElementById('selected').click();});
 						break;
 					default:
-						alert('An error occured');
+						alert('Failed to load message');
 						console.error(err);
 						loadingOverlay.classList.add('hidden');
 				}
@@ -465,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		else throw data.error;
 	}).catch(err => {
-		alert('An error occured');
+		alert('Failed to validate session');
 		console.error(err);
 	});
 

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		list = [];
 		filterBoard.forEach(board => list = list.concat(messages[board]));
-		list = list.sort((a, b) => new Date(b.date) - new Date(a.date));
+		list = list.sort((a, b) => b.id - a.id).sort((a, b) => new Date(b.date) - new Date(a.date)); 
 		if (list.length == 0) {
 			listElement.innerHTML = '<h1>No messages matching your filter</h1>';
 			return;

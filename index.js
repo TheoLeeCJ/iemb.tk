@@ -1,3 +1,13 @@
+// Service Worker checker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+			.then((reg) => {
+				console.log('Service worker registered.', reg);
+			});
+  });
+}
+
 // TODO: Remove 'board' from each message
 document.addEventListener('DOMContentLoaded', () => {
 	// Ensure that a session ID has been set
@@ -468,7 +478,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		else throw data.error;
 	}).catch(err => {
-		alert('Failed to validate session');
+		//alert('Failed to validate session');
+		window.location = 'login.html';
 		console.error(err);
 	});
 

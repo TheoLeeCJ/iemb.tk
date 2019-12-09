@@ -56,6 +56,9 @@ header.hide {
 	margin-left: 54px;
 	transition: .2s ease-in-out margin-left;
 }
+#search {
+	transition: .2s ease-in-out transform;
+}
 #search-container:focus-within, #search-container.expand {
 	margin-left: 8px;
 }
@@ -82,7 +85,10 @@ header i:not(#loading-icon) {
 	padding: 0;
 }
 #search:focus ~ span, #search:not(:placeholder-shown) ~ span {
-	transform: translateY(-12px) scale(.7);
+	transform: translateY(-9px) scale(.7);
+}
+#search:focus, #search:not(:placeholder-shown), #search:focus ~ div, #search:not(:placeholder-shown) ~ div {
+	transform: translateY(3px);
 }
 
 #filter-container {

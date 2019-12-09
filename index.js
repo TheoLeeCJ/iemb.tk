@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				viewElement.style.maxHeight = '60px';
 				viewElement.style.opacity = 1;
 				setTimeout(() => {
-					document.getElementById('close').style.opacity = 1;
+					document.getElementById('close').style.opacity = 0.5;
 					document.getElementById('close').style.pointerEvents = 'initial';
 					viewElement.removeAttribute('style');
 					viewElement.classList.add('open-message');
@@ -440,6 +440,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	document.getElementById('search').addEventListener('keyup', () => {
 		renderMessages(document.getElementById('search').value.toLowerCase());
+	});
+
+	if (document.getElementById('search').value != '') document.getElementById('search-container').classList.add('expand');
+	document.getElementById('search').addEventListener('blur', () => {
+		if (document.getElementById('search').value != '') document.getElementById('search-container').classList.add('expand');
+		else document.getElementById('search-container').classList.remove('expand');
 	});
 
 	loadingDesc.innerHTML = 'Checking Session';

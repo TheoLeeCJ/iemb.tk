@@ -20,7 +20,8 @@ require 'curl.php';
 $dom = new DOMDocument();
 
 $result = curl('https://iemb.hci.edu.sg/Board/Detail/' . $_GET['board'], 'GET', true, $sessid);
-
+echo $result;
+echo substr($result, 9, 9);
 if (substr($result, 9, 9) === '302 Found') 
 	exit(json_encode([
 		'success' => false,

@@ -1,6 +1,6 @@
 <?php
 
-function curl($url, $method, $headers, $sessid = false, $postfields = null) {
+function curl($url, $method, $headers, $sessid = false, $postfields = null, $anticompetitivebehavior = null) {
 	$ch = curl_init($url);
 	$header = [];
 	switch ($method) {
@@ -21,7 +21,8 @@ function curl($url, $method, $headers, $sessid = false, $postfields = null) {
 			break;
 	}
 	if ($headers) curl_setopt($ch, CURLOPT_HEADER, true);
-	$header[] = 'Cookie: ASP.NET_SessionId=' . $sessid;
+	if (!$anticompetitivebehavior) $header[] = 'Cookie: ASP.NET_SessionId=' . $sessid;
+	else 'Cookie: ASP.NET_SessionId=' . $sessid . ';__RequestVerificationToken=' . $anticompetitivebehavior;
 	if (count($header) > 0) curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  2);

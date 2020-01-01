@@ -7,7 +7,7 @@
 			'error' => 'missing'
 		]));
 	}
-	$res = trim(strtok(curl('https://iemb.hci.edu.sg/Board/BoardList', 'HEAD', true, $_POST['sessid']), PHP_EOL));
+	$res = trim(strtok(curl('https://iemb.hci.edu.sg/Board/BoardList', 'GET', true, $_POST['sessid']), PHP_EOL));
 	if ($res === 'HTTP/1.1 200 OK') 
 		echo json_encode([
 			'success' => true,

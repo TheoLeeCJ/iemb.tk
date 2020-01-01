@@ -106,7 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			body: `username=${encodeURIComponent(cookie.get('username'))}&password=${encodeURIComponent(cookie.get('password'))}`
 		}).then(res => res.json()).then(data => {
 			if (data.success) {
-				cookie.set('sessid', data.content, 1800);
+				cookie.set('sessid', data.content.sessid, 1800);
+				cookie.set('csrf', data.content.csrf, 1800);
 				callback();
 			}
 			else throw data.error;

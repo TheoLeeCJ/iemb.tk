@@ -21,8 +21,11 @@ function curl($url, $method, $headers, $sessid = false, $postfields = null, $ant
 			break;
 	}
 	if ($headers) curl_setopt($ch, CURLOPT_HEADER, true);
-	if (!$anticompetitivebehavior) $header[] = 'Cookie: ASP.NET_SessionId=' . $sessid;
-	else 'Cookie: ASP.NET_SessionId=' . $sessid . ';__RequestVerificationToken=' . $anticompetitivebehavior;
+	// print_r($_COOKIE);
+	if ($url != 'https://iemb.hci.edu.sg/') {
+		if ($anticompetitivebehavior) $header[] = 'Cookie: ASP.NET_SessionId=' . $sessid . '; __RequestVerificationToken=' . $anticompetitivebehavior;
+		else $header[] = 'Cookie: ASP.NET_SessionId=' . $sessid . '; __RequestVerificationToken=' . $_COOKIE['csrf'];
+	}
 	if (count($header) > 0) curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  2);

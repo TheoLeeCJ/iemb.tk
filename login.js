@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			},
 			body: `username=${encodeURIComponent(form.username.value)}&password=${encodeURIComponent(form.password.value)}`
 		}).then(res => res.json()).then(data => {
+			console.log(data);
 			if (document.getElementById('error')) 
 				form.removeChild(document.getElementById('error'));
 			if (data.success) {
 				cookie.set('sessid', data.content.sessid, 1800);
-				cookie.set('csrf', data.content.csrf, 1800);
 				cookie.set('username', form.username.value, 15552000);
 				cookie.set('password', form.password.value, 15552000);
 				window.location = 'index.html';

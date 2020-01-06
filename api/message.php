@@ -91,9 +91,8 @@ if ($form_element = $dom->getElementById('replyForm')) {
 }
 $attachments = [];
 if ($dom->getElementById('attaches')) {
-	$attachments_list = explode(';', trim(explode(PHP_EOL, $result)[246]));
-	for ($i = count($attachments_list) - 2; $i >= 0; $i -= 1) 
-		$attachments[] = substr($attachments_list[$i], 30, strpos($attachments_list[$i], "','", 30) - 30);
+        preg_match_all("/addConfirmedChild\('attaches','(.+?)'/", $result, $attachments);
+        $attachments = $attachments_list[1];
 }
 
 echo json_encode([

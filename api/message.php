@@ -92,7 +92,7 @@ if ($form_element = $dom->getElementById('replyForm')) {
 $attachments = [];
 if ($dom->getElementById('attaches')) {
         preg_match_all("/addConfirmedChild\('attaches','(.+?)'/", $result, $attachments);
-        $attachments = $attachments_list[1];
+        $attachments = $attachments[1];
 }
 
 echo json_encode([

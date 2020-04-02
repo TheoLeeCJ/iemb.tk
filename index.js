@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (!cookie.get('username') || !cookie.get('password')) window.location = 'login.html';
 	if (!cookie.get('sessid')) cookie.set('sessid', 'TEMPORARY', 100);
 
-	let messages, headerHidden = false, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1050', '1039', '1049'];
+	let messages, headerHidden = false, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1057'];
+	// let messages, headerHidden = false, firstRun = true, filterType = {unread: 1, flagged: 1}, filterBoard = ['1048', '1050', '1039', '1049'];
 	const header = document.getElementsByTagName('header')[0], loadingDesc = document.getElementById('loading-text'), loadingOverlay = document.getElementById('loading'), loadingIcon = document.getElementById('loading-icon'), listElement = document.getElementById('messages'), viewElement = document.getElementById('viewer');
 
 	function updateLocalStorage() {
@@ -17,12 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	function init() {
 		loadingIcon.innerHTML = 'cloud_download';
-		Promise.all([getMessages(1048), getMessages(1050), getMessages(1039), getMessages(1049)]).then(data => {
+		// Promise.all([getMessages(1048), getMessages(1050), getMessages(1039), getMessages(1049)]).then(data => {
+		Promise.all([getMessages(1048), getMessages(1057)]).then(data => {
 			messages = {
 				1048: data[0],
-				1050: data[1],
-				1039: data[2],
-				1049: data[3],
+				// 1050: data[1],
+				// 1039: data[2],
+				// 1049: data[3],
+				1057: data[1]
 			};
 			renderMessages();
 			updateLocalStorage();
@@ -107,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}).then(res => res.json()).then(data => {
 			if (data.success) {
 				cookie.set('sessid', data.content.sessid, 1800);
-				cookie.set('csrf', data.content.csrf, 1800);
+				cookie.set('authtoken', data.content.authtoken, 1800);
 				callback();
 			}
 			else throw data.error;

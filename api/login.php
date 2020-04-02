@@ -51,12 +51,15 @@ if ($redirectResponse === false)
 curl_close($curl);
 
 if (preg_match("/Set-Cookie: ASP.NET_SessionId=(.*?);/", $redirectResponse, $sessid) !== false) {
-	echo json_encode([
-		'success' => true,
-		'content' => [
-			'sessid' => $sessid[1]
-		]
-	]);
+	if (preg_match("/Set-Cookie: AuthenticationToken=(.*?);/", $redirectResponse, $auth_token) !== false) {
+		echo json_encode([
+			'success' => true,
+			'content' => [
+				'sessid' => $sessid[1],
+				'authtoken' => $auth_token[1]
+			]
+		]);
+	}
 }
 else echo json_encode([
 		'success' => false,

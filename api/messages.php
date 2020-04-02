@@ -18,9 +18,8 @@ $sessid = empty($_GET['sessid']) ? $_COOKIE['sessid'] : $_GET['sessid'];
 
 require 'curl.php';
 $dom = new DOMDocument();
-
 $result = curl('https://iemb.hci.edu.sg/Board/Detail/' . $_GET['board'], 'GET', true, $sessid);
-if (substr($result, 9, 9) === '302 Found') 
+if (substr($result, 9, 9) === '302 Found')
 	exit(json_encode([
 		'success' => false,
 		'error' => 'expired'

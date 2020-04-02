@@ -1,5 +1,4 @@
 // Somewhere here, we need to clear the service worker before allowing a **new** user to log in
-alert(1);
 document.addEventListener('DOMContentLoaded', () => {
 	const form = document.getElementsByTagName('form')[0];
 	form.addEventListener('submit', e => {
@@ -16,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				form.removeChild(document.getElementById('error'));
 			if (data.success) {
 				cookie.set('sessid', data.content.sessid, 1800);
+				cookie.set('authtoken', data.content.authtoken, 1800);
 				cookie.set('username', form.username.value, 15552000);
 				cookie.set('password', form.password.value, 15552000);
 				window.location = 'index.html';

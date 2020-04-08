@@ -24,7 +24,7 @@ $postData = "UserName=$username&Password=$password&__RequestVerificationToken=".
 $length = strlen($postData);
 
 curl_setopt_array($curl, array(
-	CURLOPT_URL => 'https://iemb.hci.edu.sg/home/login',
+	CURLOPT_URL => 'https://iemb.hci.edu.sg/home/logincheck',
 	CURLOPT_SSL_VERIFYPEER => 0,
 	CURLOPT_SSL_VERIFYHOST => 2,
 	CURLOPT_RETURNTRANSFER => 1,

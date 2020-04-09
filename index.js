@@ -1,3 +1,9 @@
+if (!localStorage.getItem("hblpatch")) {
+  localStorage.clear();
+  localStorage.setItem("hblpatch", "run_OK");
+  window.location.reload();
+}
+
 // TODO: Remove 'board' from each message
 document.addEventListener('DOMContentLoaded', () => {
 	// Ensure that a session ID has been set
